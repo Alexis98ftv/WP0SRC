@@ -6,7 +6,7 @@
 ## Purpose       : WP0 Takss: Plot Receiver SPP Analyses
 ## Project       : WP0-JSNP
 ## Component     : 
-## Author        : GNSS Academy
+## Author        : GNSS Academy - Alexis
 ## Creation date : 2021
 ## File Version  : 1.0
 ##
