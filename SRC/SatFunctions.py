@@ -168,3 +168,58 @@ def plotSatTracks(LosData):
 
     # Call generatePlot from Plots library
     generatePlot(PlotConf)
+
+    # Plot Satellite Velocity Figures
+def plotSatVelocity(LosData):
+    PlotConf = {}
+
+    PlotConf["Type"] = "Lines"
+    PlotConf["FigSize"] = (8.4,7.6)
+    PlotConf["Title"] = "Satellite Range Velocity from TLSA on Year 2015"\
+        " DoY 006"
+
+    PlotConf["xLabel"] = "Hour of DoY 006"
+    PlotConf["xTicks"] = range(0, 25)
+    PlotConf["xLim"] = [0, 24]
+    
+    
+    PlotConf["yLabel"] = "Absolute Velocity [km/s]"
+    # Velocity process
+    velX = LosData[LOS_IDX["VEL-X[m/s]"]]
+    velY = LosData[LOS_IDX["VEL-Y[m/s]"]]
+    velZ = LosData[LOS_IDX["VEL-Z[m/s]"]]
+    velABS = []
+    for index in range(0, len(velX)):
+        # Velocity abs converted to km/s
+        value = (np.sqrt(np.square(velX[index]) + np.square(velY[index]) + np.square(velZ[index])))/1000 
+        velABS.append(value)
+        index += 1
+    #print(velABS)
+
+    PlotConf["yTicks"] = sorted(unique(velABS))
+    PlotConf["yTicksLabels"] = sorted(unique(velABS))
+    PlotConf["yLim"] = [2.6, max(unique(velABS)) + 0.1]
+ 
+
+    PlotConf["Grid"] = 1
+
+    PlotConf["Marker"] = '.'
+    PlotConf["LineWidth"] = 1.5
+
+    PlotConf["ColorBar"] = "gnuplot"
+    PlotConf["ColorBarLabel"] = "Elevation [deg]"
+    PlotConf["ColorBarMin"] = 0.
+    PlotConf["ColorBarMax"] = 90.
+
+    PlotConf["xData"] = {}
+    PlotConf["yData"] = {}
+    PlotConf["zData"] = {}
+    Label = 0
+    PlotConf["xData"][Label] = LosData[LOS_IDX["SOD"]] / GnssConstants.S_IN_H
+    PlotConf["yData"][Label] = velABS
+    PlotConf["zData"][Label] = LosData[LOS_IDX["ELEV"]]
+
+    PlotConf["Path"] = sys.argv[1] + '/OUT/LOS/SAT/' + 'SAT_VELOCITY_TLSA_D006Y15.png'
+
+    # Call generatePlot from Plots library
+    generatePlot(PlotConf)
