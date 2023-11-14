@@ -210,6 +210,5 @@ def plotSatVelocity(LosData):
 
     PlotConf["Path"] = sys.argv[1] + '/OUT/LOS/SAT/' + 'SAT_VELOCITY_TLSA_D006Y15.png'
 
-    
     # Call generatePlot from Plots library
     generatePlot(PlotConf)
