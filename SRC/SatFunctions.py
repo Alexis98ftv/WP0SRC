@@ -188,21 +188,7 @@ def plotSatVelocity(LosData):
     velX = np.array(LosData[LOS_IDX["VEL-X[m/s]"]])
     velY = np.array(LosData[LOS_IDX["VEL-Y[m/s]"]])
     velZ = np.array(LosData[LOS_IDX["VEL-Z[m/s]"]])
-    DataLen = len(velX)
-    #velABS = np.zeros(DataLen)
-    #velABS = []
-    
     velABSnp = np.sqrt(velX**2+velY**2+velZ**2) / GnssConstants.M_IN_KM
-
-    #for index in range(DataLen):
-        # Velocity abs converted to km/s
-     #   value = (np.sqrt(np.square(velX[index]) + np.square(velY[index]) + np.square(velZ[index]))) / GnssConstants.M_IN_KM
-        #velABS[index] = value
-      #  velABS.append(value)    
-    #velABSnp = np.array(velABS)
-    #velABS.to_numpy()
-    #print(velABSnp)
-    #print(velX)
 
     PlotConf["Grid"] = 1
 
