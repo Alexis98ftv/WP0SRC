@@ -185,21 +185,23 @@ def plotSatVelocity(LosData):
     
     PlotConf["yLabel"] = "Absolute Velocity [km/s]"
     # Velocity process
-    velX = LosData[LOS_IDX["VEL-X[m/s]"]]
-    velY = LosData[LOS_IDX["VEL-Y[m/s]"]]
-    velZ = LosData[LOS_IDX["VEL-Z[m/s]"]]
+    velX = np.array(LosData[LOS_IDX["VEL-X[m/s]"]])
+    velY = np.array(LosData[LOS_IDX["VEL-Y[m/s]"]])
+    velZ = np.array(LosData[LOS_IDX["VEL-Z[m/s]"]])
+    DataLen = len(velX)
+    #velABS = np.zeros(DataLen)
     velABS = []
-    for index in range(0, len(velX)):
+    
+    
+    #for index in range(DataLen):
         # Velocity abs converted to km/s
-        value = (np.sqrt(np.square(velX[index]) + np.square(velY[index]) + np.square(velZ[index])))/1000 
-        velABS.append(value)
-        index += 1
-    #print(velABS)
-
-    PlotConf["yTicks"] = sorted(unique(velABS))
-    PlotConf["yTicksLabels"] = sorted(unique(velABS))
-    PlotConf["yLim"] = [2.6, max(unique(velABS)) + 0.1]
- 
+     #   value = (np.sqrt(np.square(velX[index]) + np.square(velY[index]) + np.square(velZ[index]))) / GnssConstants.M_IN_KM
+        #velABS[index] = value
+      #  velABS.append(value)    
+    #velABSnp = np.array(velABS)
+    #velABS.to_numpy()
+    #print(velABSnp)
+    #print(velX)
 
     PlotConf["Grid"] = 1
 
@@ -216,10 +218,11 @@ def plotSatVelocity(LosData):
     PlotConf["zData"] = {}
     Label = 0
     PlotConf["xData"][Label] = LosData[LOS_IDX["SOD"]] / GnssConstants.S_IN_H
-    PlotConf["yData"][Label] = velABS
+    PlotConf["yData"][Label] = velABSnp
     PlotConf["zData"][Label] = LosData[LOS_IDX["ELEV"]]
 
     PlotConf["Path"] = sys.argv[1] + '/OUT/LOS/SAT/' + 'SAT_VELOCITY_TLSA_D006Y15.png'
 
+    print("Executing generatePlot function....")
     # Call generatePlot from Plots library
     generatePlot(PlotConf)
