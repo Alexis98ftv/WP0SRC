@@ -190,9 +190,10 @@ def plotSatVelocity(LosData):
     velZ = np.array(LosData[LOS_IDX["VEL-Z[m/s]"]])
     DataLen = len(velX)
     #velABS = np.zeros(DataLen)
-    velABS = []
+    #velABS = []
     
-    
+    velABSnp = np.sqrt(velX**2+velY**2+velZ**2) / GnssConstants.M_IN_KM
+
     #for index in range(DataLen):
         # Velocity abs converted to km/s
      #   value = (np.sqrt(np.square(velX[index]) + np.square(velY[index]) + np.square(velZ[index]))) / GnssConstants.M_IN_KM
@@ -223,6 +224,6 @@ def plotSatVelocity(LosData):
 
     PlotConf["Path"] = sys.argv[1] + '/OUT/LOS/SAT/' + 'SAT_VELOCITY_TLSA_D006Y15.png'
 
-    print("Executing generatePlot function....")
+    
     # Call generatePlot from Plots library
     generatePlot(PlotConf)
