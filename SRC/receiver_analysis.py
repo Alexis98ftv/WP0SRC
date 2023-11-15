@@ -138,3 +138,4 @@ if(Conf["PLOT_SATVEL"] == '1'):
 
     # Configure plot and call plot generation function
     SatFunctions.plotSatVelocity(LosData)
+
