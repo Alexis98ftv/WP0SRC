@@ -139,4 +139,16 @@ if(Conf["PLOT_SATVEL"] == '1'):
     # Configure plot and call plot generation function
     SatFunctions.plotSatVelocity(LosData)
 
+   # Plot Satellite clock from NAV message of all the PRNs figures
+if(Conf["PLOT_SATCLK"] == '1'):
+    # Read the cols we need from LOS file
+    LosData = read_csv(LosFile, delim_whitespace=True, skiprows=1, header=None,\
+    usecols=[LOS_IDX["SOD"], 
+    LOS_IDX["PRN"],
+    LOS_IDX["SV-CLK[m]"]])
+    
+    print( 'Plot Satellite Clocks for each PRNs ...')
+
+    # Configure plot and call plot generation function
+    SatFunctions.plotClkNAV(LosData)
 

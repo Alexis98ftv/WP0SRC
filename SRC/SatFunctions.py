@@ -212,3 +212,41 @@ def plotSatVelocity(LosData):
 
     # Call generatePlot from Plots library
     generatePlot(PlotConf)
+
+    # Plot Satellite clock from NAV message of all the PRNs figures
+def plotClkNAV(LosData):
+    PlotConf = {}
+    
+    PlotConf["Type"] = "Lines"
+    PlotConf["FigSize"] = (8.4,7.6)
+    PlotConf["Title"] = "PRN19 NAV CLK from TLSA on Year 2015"\
+        " DoY 006"
+
+    PlotConf["xLabel"] = "Hour of DoY 006"
+    PlotConf["yLabel"] = "CLK[km]"
+    
+    # all values for PRN
+    prn_codes = sorted(unique(LosData[LOS_IDX["PRN"]]))
+    filter_cond = LosData[LOS_IDX["PRN"]] == 19
+    CLK_19 = LosData[LOS_IDX["SV-CLK[m]"]][filter_cond]
+    time_19 = LosData[LOS_IDX["SOD"]][filter_cond]
+    
+
+    PlotConf["Grid"] = 1
+
+    PlotConf["Marker"] = '.'
+    PlotConf["LineWidth"] = 1.5
+
+    PlotConf["xData"] = {}
+    PlotConf["yData"] = {}
+    Label = 0
+
+
+    
+    PlotConf["xData"][Label] = time_19 / GnssConstants.S_IN_H
+    PlotConf["yData"][Label] = CLK_19
+
+    PlotConf["Path"] = sys.argv[1] + '/OUT/LOS/SAT/CLK_TLSA/' + 'SAT_CLK_TLSA_D006Y15_PRN19.png'
+
+    # Call generatePlot from Plots library
+    generatePlot(PlotConf)
