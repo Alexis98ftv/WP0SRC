@@ -219,19 +219,10 @@ def plotClkNAV(LosData):
     
     PlotConf["Type"] = "Lines"
     PlotConf["FigSize"] = (8.4,7.6)
-    PlotConf["Title"] = "PRN19 NAV CLK from TLSA on Year 2015"\
-        " DoY 006"
 
     PlotConf["xLabel"] = "Hour of DoY 006"
     PlotConf["yLabel"] = "CLK[km]"
     
-    # all values for PRN
-    prn_codes = sorted(unique(LosData[LOS_IDX["PRN"]]))
-    filter_cond = LosData[LOS_IDX["PRN"]] == 19
-    CLK_19 = LosData[LOS_IDX["SV-CLK[m]"]][filter_cond]
-    time_19 = LosData[LOS_IDX["SOD"]][filter_cond]
-    
-
     PlotConf["Grid"] = 1
 
     PlotConf["Marker"] = '.'
@@ -241,12 +232,20 @@ def plotClkNAV(LosData):
     PlotConf["yData"] = {}
     Label = 0
 
+    # all values for PRN
+    prn_codes = sorted(unique(LosData[LOS_IDX["PRN"]]))
+    for prn in prn_codes:
+        
+        PlotConf["Title"] = "PRN" + str(prn) + " NAV CLK from TLSA on Year 2015"\
+        " DoY 006"
+        
+        filter_cond = LosData[LOS_IDX["PRN"]] == prn
+        CLK_values = LosData[LOS_IDX["SV-CLK[m]"]][filter_cond]
+        time_cond = LosData[LOS_IDX["SOD"]][filter_cond]
+        PlotConf["xData"][Label] = time_cond / GnssConstants.S_IN_H
+        PlotConf["yData"][Label] = CLK_values
 
-    
-    PlotConf["xData"][Label] = time_19 / GnssConstants.S_IN_H
-    PlotConf["yData"][Label] = CLK_19
+        PlotConf["Path"] = sys.argv[1] + '/OUT/LOS/SAT/CLK_TLSA/' + 'SAT_CLK_TLSA_D006Y15_PRN' + str(prn) + '.png'
 
-    PlotConf["Path"] = sys.argv[1] + '/OUT/LOS/SAT/CLK_TLSA/' + 'SAT_CLK_TLSA_D006Y15_PRN19.png'
-
-    # Call generatePlot from Plots library
-    generatePlot(PlotConf)
+        # Call generatePlot from Plots library
+        generatePlot(PlotConf) 
