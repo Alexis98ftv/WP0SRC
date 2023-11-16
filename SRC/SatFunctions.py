@@ -65,7 +65,6 @@ def plotSatVisibility(LosData):
     # Call generatePlot from Plots library
     generatePlot(PlotConf)
 
-
 # Plot Satellite Geometrical Range Figures
 def plotSatGeomRnge(LosData):
     PlotConf = {}
@@ -103,7 +102,6 @@ def plotSatGeomRnge(LosData):
 
     # Call generatePlot from Plots library
     generatePlot(PlotConf)
-
 
 # Plot Satellite Tracks Figures
 def plotSatTracks(LosData):
@@ -169,7 +167,7 @@ def plotSatTracks(LosData):
     # Call generatePlot from Plots library
     generatePlot(PlotConf)
 
-    # Plot Satellite Velocity Figures
+# Plot Satellite Velocity Figures
 def plotSatVelocity(LosData):
     PlotConf = {}
 
@@ -213,7 +211,7 @@ def plotSatVelocity(LosData):
     # Call generatePlot from Plots library
     generatePlot(PlotConf)
 
-    # Plot Satellite clock from NAV message of all the PRNs figures
+# Plot Satellite clock from NAV message of all the PRNs figures
 def plotSatCLK_PRN_NAV(LosData):
     PlotConf = {}
     
@@ -250,7 +248,7 @@ def plotSatCLK_PRN_NAV(LosData):
         # Call generatePlot from Plots library
         generatePlot(PlotConf) 
 
-    # Plot Satellite CLK corrected Figure
+# Plot Satellite CLK corrected Figure
 def plotSatClkCorrected(LosData):
     PlotConf = {}
 
@@ -280,8 +278,8 @@ def plotSatClkCorrected(LosData):
 
     PlotConf["ColorBar"] = "gnuplot"
     PlotConf["ColorBarLabel"] = "GPS-PRN"
-    PlotConf["ColorBarMin"] = 0.
-    PlotConf["ColorBarMax"] = 32.
+    #PlotConf["ColorBarMin"] = 0.
+    #PlotConf["ColorBarMax"] = 32.
 
     PlotConf["xData"] = {}
     PlotConf["yData"] = {}
@@ -296,7 +294,7 @@ def plotSatClkCorrected(LosData):
     # Call generatePlot from Plots library
     generatePlot(PlotConf)
 
-    # Plot Satellite CLK Total Figure
+# Plot Satellite CLK Total Figure
 def plotSatTGD(LosData):
     PlotConf = {}
 
@@ -335,7 +333,7 @@ def plotSatTGD(LosData):
     # Call generatePlot from Plots library
     generatePlot(PlotConf)
 
-    # Plot Satellite CLK Total Figure
+# Plot Satellite CLK Total Figure
 def plotSatDTR(LosData):
     PlotConf = {}
 
@@ -374,7 +372,7 @@ def plotSatDTR(LosData):
     # Call generatePlot from Plots library
     generatePlot(PlotConf)
 
-    # Plot of slant ionospheric delays (STEC in meters) Figure
+# Plot of slant ionospheric delays (STEC in meters) Figure
 def plotIonSTECvsTime(LosData):
     PlotConf = {}
 
@@ -413,7 +411,7 @@ def plotIonSTECvsTime(LosData):
     # Call generatePlot from Plots library
     generatePlot(PlotConf)
 
-    # Plot of slant ionospheric delays (STEC in meters) Figure
+# Plot of slant ionospheric delays (STEC in meters) Figure
 def plotIonSTECvsPRN(LosData):
     PlotConf = {}
 
@@ -450,3 +448,318 @@ def plotIonSTECvsPRN(LosData):
 
     # Call generatePlot from Plots library
     generatePlot(PlotConf)
+
+# Plot VTEC in meters from STEC Figure
+def plotIonVTECvsTime(LosData):
+    PlotConf = {}
+
+    PlotConf["Type"] = "Lines"
+    PlotConf["FigSize"] = (8.4,7.6)
+    PlotConf["Title"] = "Ionospheric Klobuchar Delays (VTEC) from TLSA on Year 2015"\
+        " DoY 006"
+
+    PlotConf["xLabel"] = "Hour of DoY 006"
+    PlotConf["xTicks"] = range(0, 25)
+    PlotConf["xLim"] = [0, 24]
+    
+    PlotConf["yLabel"] = "VTEC[m]"
+    # VTEC PROCESS
+
+    PlotConf["Grid"] = 1
+
+    PlotConf["Marker"] = '.'
+    PlotConf["LineWidth"] = 1
+
+    PlotConf["ColorBar"] = "gnuplot"
+    PlotConf["ColorBarLabel"] = "Elevation [deg]"
+    PlotConf["ColorBarMin"] = 0.
+    PlotConf["ColorBarMax"] = 90.
+
+    PlotConf["xData"] = {}
+    PlotConf["yData"] = {}
+    PlotConf["zData"] = {}
+    Label = 0
+    PlotConf["xData"][Label] = LosData[LOS_IDX["SOD"]] / GnssConstants.S_IN_H
+    PlotConf["yData"][Label] = LosData[LOS_IDX["VTEC[m]"]]
+    PlotConf["zData"][Label] = LosData[LOS_IDX["ELEV"]]
+
+    PlotConf["Path"] = sys.argv[1] + '/OUT/LOS/ION/' + 'IONO_VTEC_vs_TIME_TLSA_D006Y15.png'
+
+    # Call generatePlot from Plots library
+    generatePlot(PlotConf)
+
+# Plot the satellite visibility periods using VTEC
+def plotIonVTECvsPRN(LosData):
+    PlotConf = {}
+
+    PlotConf["Type"] = "Lines"
+    PlotConf["FigSize"] = (8.4,7.6)
+    PlotConf["Title"] = "Satellite Visibility vs VTEC from TLSA on Year 2015"\
+        " DoY 006"
+
+    PlotConf["xLabel"] = "Hour of DoY 006"
+    PlotConf["xTicks"] = range(0, 25)
+    PlotConf["xLim"] = [0, 24]
+    
+    PlotConf["yLabel"] = "GPS-PRN"
+    PlotConf["yTicks"] = range(1, 33)
+    PlotConf["yLim"] = [0, 33]
+
+    PlotConf["Grid"] = 1
+
+    PlotConf["Marker"] = '.'
+    PlotConf["LineWidth"] = 1
+
+    PlotConf["ColorBar"] = "gnuplot"
+    PlotConf["ColorBarLabel"] = "VTEC[m]"
+
+    PlotConf["xData"] = {}
+    PlotConf["yData"] = {}
+    PlotConf["zData"] = {}
+    Label = 0
+    PlotConf["xData"][Label] = LosData[LOS_IDX["SOD"]] / GnssConstants.S_IN_H
+    PlotConf["yData"][Label] = LosData[LOS_IDX["PRN"]]
+    PlotConf["zData"][Label] = LosData[LOS_IDX["VTEC[m]"]]
+
+    PlotConf["Path"] = sys.argv[1] + '/OUT/LOS/ION/' + 'IONO_VTEC_vs_PRN_TLSA_D006Y15.png'
+
+    # Call generatePlot from Plots library
+    generatePlot(PlotConf)
+
+# Plot of STD (Slant Tropospheric Delay)
+def plotTropoSTD(LosData):
+    PlotConf = {}
+
+    PlotConf["Type"] = "Lines"
+    PlotConf["FigSize"] = (8.4,7.6)
+    PlotConf["Title"] = "Slant Tropospheric Delay (STD) in meters from TLSA on Year 2015"\
+        " DoY 006"
+
+    PlotConf["xLabel"] = "Hour of DoY 006"
+    PlotConf["xTicks"] = range(0, 25)
+    PlotConf["xLim"] = [0, 24]
+    
+    PlotConf["yLabel"] = "STD[m]"
+
+    PlotConf["Grid"] = 1
+
+    PlotConf["Marker"] = '.'
+    PlotConf["LineWidth"] = 1
+
+    PlotConf["ColorBar"] = "gnuplot"
+    PlotConf["ColorBarLabel"] = "Elevation [deg]"
+    PlotConf["ColorBarMin"] = 0.
+    PlotConf["ColorBarMax"] = 90.
+
+    PlotConf["xData"] = {}
+    PlotConf["yData"] = {}
+    PlotConf["zData"] = {}
+    Label = 0
+    PlotConf["xData"][Label] = LosData[LOS_IDX["SOD"]] / GnssConstants.S_IN_H
+    PlotConf["yData"][Label] = LosData[LOS_IDX["TROPO[m]"]]
+    PlotConf["zData"][Label] = LosData[LOS_IDX["ELEV"]]
+
+    PlotConf["Path"] = sys.argv[1] + '/OUT/LOS/TRO/' + 'TROPO_STD_vs_TIME_TLSA_D006Y15.png'
+
+    # Call generatePlot from Plots library
+    generatePlot(PlotConf)
+
+# Plot of STD (Slant Tropospheric Delay)
+def plotTropoZTD(LosData):
+    PlotConf = {}
+
+    PlotConf["Type"] = "Lines"
+    PlotConf["FigSize"] = (8.4,7.6)
+    PlotConf["Title"] = "Zenith Tropospheric Delays (ZTD) from TLSA on Year 2015"\
+        " DoY 006"
+
+    PlotConf["xLabel"] = "Hour of DoY 006"
+    PlotConf["xTicks"] = range(0, 25)
+    PlotConf["xLim"] = [0, 24]
+    
+    PlotConf["yLabel"] = "ZTD[m]"
+    # ZTD calc
+    STD = np.array(LosData[LOS_IDX["TROPO[m]"]])
+    mpp = np.array(LosData[LOS_IDX["MPP[elev]"]])
+    ZTD = []
+    for index in range(len(STD)):
+        ZTD.append(STD[index] / mpp[index])
+    
+    #print(ZTD)
+    ztd_min = min(ZTD)
+    ztd_max = max(ZTD)
+    print(ztd_min, ztd_max)
+    
+    
+    PlotConf["Grid"] = 1
+
+    PlotConf["Marker"] = '.'
+    PlotConf["LineWidth"] = 1
+
+    PlotConf["ColorBar"] = "gnuplot"
+    PlotConf["ColorBarLabel"] = "Elevation [deg]"
+    PlotConf["ColorBarMin"] = 0.
+    PlotConf["ColorBarMax"] = 90.
+
+    PlotConf["xData"] = {}
+    PlotConf["yData"] = {}
+    PlotConf["zData"] = {}
+    Label = 0
+    PlotConf["xData"][Label] = LosData[LOS_IDX["SOD"]] / GnssConstants.S_IN_H
+    PlotConf["yData"][Label] = ZTD
+    PlotConf["zData"][Label] = LosData[LOS_IDX["ELEV"]]
+
+    PlotConf["Path"] = sys.argv[1] + '/OUT/LOS/TRO/' + 'TROPO_ZTD_vs_TIME_TLSA_D006Y15.png'
+
+    # Call generatePlot from Plots library
+    #generatePlot(PlotConf)
+
+# Plot Pseudo-ranges (Code Measurements C1) for all satellites
+def plotMsrCODES(LosData):
+    PlotConf = {}
+
+    PlotConf["Type"] = "Lines"
+    PlotConf["FigSize"] = (8.4,7.6)
+    PlotConf["Title"] = "Pseudo-range C1C vs TIME for TLSA"
+
+    PlotConf["xLabel"] = "Hour of DoY 006"
+    PlotConf["xTicks"] = range(0, 25)
+    PlotConf["xLim"] = [0, 24]
+    
+    PlotConf["yLabel"] = "Pseudo-range[km]"
+    
+    PlotConf["Grid"] = 1
+
+    PlotConf["Marker"] = '.'
+    PlotConf["LineWidth"] = 1
+
+    PlotConf["ColorBar"] = "gnuplot"
+    PlotConf["ColorBarLabel"] = "Elevation [deg]"
+    PlotConf["ColorBarMin"] = 0.
+    PlotConf["ColorBarMax"] = 90.
+
+    PlotConf["xData"] = {}
+    PlotConf["yData"] = {}
+    PlotConf["zData"] = {}
+    Label = 0
+    PlotConf["xData"][Label] = LosData[LOS_IDX["SOD"]] / GnssConstants.S_IN_H
+    PlotConf["yData"][Label] = LosData[LOS_IDX["RANGE[m]"]] / GnssConstants.M_IN_KM
+    PlotConf["zData"][Label] = LosData[LOS_IDX["ELEV"]]
+
+    PlotConf["Path"] = sys.argv[1] + '/OUT/LOS/MSR/' + 'MEAS_CODES_vs_TIME_TLSA_D006Y15.png'
+
+    # Call generatePlot from Plots library
+    generatePlot(PlotConf)
+
+# Plot Tau = C1C/c for all satellites
+def plotMsrTAU(LosData):
+    PlotConf = {}
+
+    PlotConf["Type"] = "Lines"
+    PlotConf["FigSize"] = (8.4,7.6)
+    PlotConf["Title"] = "Tau=Rho/c from TLSA on Year 2015 Doy 006"
+
+    PlotConf["xLabel"] = "Hour of DoY 006"
+    PlotConf["xTicks"] = range(0, 25)
+    PlotConf["xLim"] = [0, 24]
+    
+    PlotConf["yLabel"] = "Pseudo-range[km]"
+    
+    PlotConf["Grid"] = 1
+
+    PlotConf["Marker"] = '.'
+    PlotConf["LineWidth"] = 1
+
+    PlotConf["ColorBar"] = "gnuplot"
+    PlotConf["ColorBarLabel"] = "Elevation [deg]"
+    PlotConf["ColorBarMin"] = 0.
+    PlotConf["ColorBarMax"] = 90.
+
+    PlotConf["xData"] = {}
+    PlotConf["yData"] = {}
+    PlotConf["zData"] = {}
+    Label = 0
+    PlotConf["xData"][Label] = LosData[LOS_IDX["SOD"]] / GnssConstants.S_IN_H
+    PlotConf["yData"][Label] = LosData[LOS_IDX["RANGE[m]"]] / GnssConstants.LIGHT_SPEED_M_S
+    PlotConf["zData"][Label] = LosData[LOS_IDX["ELEV"]]
+
+    PlotConf["Path"] = sys.argv[1] + '/OUT/LOS/MSR/' + 'TAU_vs_TIME_TLSA_D006Y15.png'
+
+    # Call generatePlot from Plots library
+    generatePlot(PlotConf)
+
+# Plot Time of Flight (ToF) for all satellites
+def plotMsrToF(LosData):
+    PlotConf = {}
+
+    PlotConf["Type"] = "Lines"
+    PlotConf["FigSize"] = (8.4,7.6)
+    PlotConf["Title"] = "Time of Flight (ToF) from TLSA on Year 2015 Doy 006"
+
+    PlotConf["xLabel"] = "Hour of DoY 006"
+    PlotConf["xTicks"] = range(0, 25)
+    PlotConf["xLim"] = [0, 24]
+    
+    PlotConf["yLabel"] = "ToF [ms]"
+    
+    PlotConf["Grid"] = 1
+
+    PlotConf["Marker"] = '.'
+    PlotConf["LineWidth"] = 1
+
+    PlotConf["ColorBar"] = "gnuplot"
+    PlotConf["ColorBarLabel"] = "Elevation [deg]"
+    PlotConf["ColorBarMin"] = 0.
+    PlotConf["ColorBarMax"] = 90.
+
+    PlotConf["xData"] = {}
+    PlotConf["yData"] = {}
+    PlotConf["zData"] = {}
+    Label = 0
+    PlotConf["xData"][Label] = LosData[LOS_IDX["SOD"]] / GnssConstants.S_IN_H
+    PlotConf["yData"][Label] = LosData[LOS_IDX["TOF[ms]"]]
+    PlotConf["zData"][Label] = LosData[LOS_IDX["ELEV"]]
+
+    PlotConf["Path"] = sys.argv[1] + '/OUT/LOS/MSR/' + 'TOF_vs_TIME_TLSA_D006Y15.png'
+
+    # Call generatePlot from Plots library
+    generatePlot(PlotConf)
+
+# Plot the Doppler Frequency in KHz
+def plotMsrDOP(LosData):
+    PlotConf = {}
+
+    PlotConf["Type"] = "Lines"
+    PlotConf["FigSize"] = (8.4,7.6)
+    PlotConf["Title"] = "Doppler Frequency from TLSA on Year 2015 Doy 006"
+
+    PlotConf["xLabel"] = "Hour of DoY 006"
+    PlotConf["xTicks"] = range(0, 25)
+    PlotConf["xLim"] = [0, 24]
+    
+    PlotConf["yLabel"] = "Doppler Frequency [KHz]"
+    # doppler process
+    
+    PlotConf["Grid"] = 1
+
+    PlotConf["Marker"] = '.'
+    PlotConf["LineWidth"] = 1
+
+    PlotConf["ColorBar"] = "gnuplot"
+    PlotConf["ColorBarLabel"] = "Elevation [deg]"
+    PlotConf["ColorBarMin"] = 0.
+    PlotConf["ColorBarMax"] = 90.
+
+    PlotConf["xData"] = {}
+    PlotConf["yData"] = {}
+    PlotConf["zData"] = {}
+    Label = 0
+    PlotConf["xData"][Label] = LosData[LOS_IDX["SOD"]] / GnssConstants.S_IN_H
+    PlotConf["yData"][Label] = 0
+    PlotConf["zData"][Label] = LosData[LOS_IDX["ELEV"]]
+
+    PlotConf["Path"] = sys.argv[1] + '/OUT/LOS/MSR/' + 'DOPPLER_FREQ_vs_TIME_TLSA_D006Y15.png'
+
+    # Call generatePlot from Plots library
+    #generatePlot(PlotConf)
+    print("aun no está terminado")
