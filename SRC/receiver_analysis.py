@@ -194,3 +194,33 @@ if(Conf["PLOT_SATDTR"] == '1'):
     
     # Configure plot and call plot generation function
     SatFunctions.plotSatDTR(LosData)
+
+    # Plot of slant ionospheric delays (STEC in meters) from Klobuchar
+    # model for all satellites as a function of the hour of the day
+if(Conf["PLOT_ION_STEC_TIME"] == '1'):
+    # Read the cols we need from LOS file
+    LosData = read_csv(LosFile, delim_whitespace=True, skiprows=1, header=None,\
+    usecols=[LOS_IDX["SOD"], 
+    LOS_IDX["ELEV"],
+    LOS_IDX["STEC[m]"]])
+    
+    print( 'Plot of slant ionospheric delays (STEC in meters) ...')
+    
+    # Configure plot and call plot generation function
+    SatFunctions.plotIonSTECvsTime(LosData)
+
+
+    # Plot the satellite visibility periods  using
+    # STEC value as part of the color bar in order to see the STEC
+    # dependency during the satellite visibility pass.
+if(Conf["PLOT_ION_STEC_PRN"] == '1'):
+    # Read the cols we need from LOS file
+    LosData = read_csv(LosFile, delim_whitespace=True, skiprows=1, header=None,\
+    usecols=[LOS_IDX["SOD"], 
+    LOS_IDX["PRN"],
+    LOS_IDX["STEC[m]"]])
+    
+    print( 'Plot the satellite visibility periods (STEC depency) ...')
+    
+    # Configure plot and call plot generation function
+    SatFunctions.plotIonSTECvsPRN(LosData)
