@@ -373,3 +373,80 @@ def plotSatDTR(LosData):
 
     # Call generatePlot from Plots library
     generatePlot(PlotConf)
+
+    # Plot of slant ionospheric delays (STEC in meters) Figure
+def plotIonSTECvsTime(LosData):
+    PlotConf = {}
+
+    PlotConf["Type"] = "Lines"
+    PlotConf["FigSize"] = (8.4,7.6)
+    PlotConf["Title"] = "Ionospheric Klobuchar Delays (STEC) from TLSA on Year 2015"\
+        " DoY 006"
+
+    PlotConf["xLabel"] = "Hour of DoY 006"
+    PlotConf["xTicks"] = range(0, 25)
+    PlotConf["xLim"] = [0, 24]
+    
+    
+    PlotConf["yLabel"] = "STEC[m]"
+
+    PlotConf["Grid"] = 1
+
+    PlotConf["Marker"] = '.'
+    PlotConf["LineWidth"] = 0.5
+
+    PlotConf["ColorBar"] = "gnuplot"
+    PlotConf["ColorBarLabel"] = "Elevation [deg]"
+    PlotConf["ColorBarMin"] = 0.
+    PlotConf["ColorBarMax"] = 90.
+
+    PlotConf["xData"] = {}
+    PlotConf["yData"] = {}
+    PlotConf["zData"] = {}
+    Label = 0
+    PlotConf["xData"][Label] = LosData[LOS_IDX["SOD"]] / GnssConstants.S_IN_H
+    PlotConf["yData"][Label] = LosData[LOS_IDX["STEC[m]"]]
+    PlotConf["zData"][Label] = LosData[LOS_IDX["ELEV"]]
+
+    PlotConf["Path"] = sys.argv[1] + '/OUT/LOS/ION/' + 'IONO_STEC_vs_TIME_TLSA_D006Y15.png'
+
+    # Call generatePlot from Plots library
+    generatePlot(PlotConf)
+
+    # Plot of slant ionospheric delays (STEC in meters) Figure
+def plotIonSTECvsPRN(LosData):
+    PlotConf = {}
+
+    PlotConf["Type"] = "Lines"
+    PlotConf["FigSize"] = (8.4,7.6)
+    PlotConf["Title"] = "Satellite Visibility vs STEC from TLSA on Year 2015"\
+        " DoY 006"
+
+    PlotConf["xLabel"] = "Hour of DoY 006"
+    PlotConf["xTicks"] = range(0, 25)
+    PlotConf["xLim"] = [0, 24]
+    
+    PlotConf["yLabel"] = "GPS-PRN"
+    PlotConf["yTicks"] = range(1, 33)
+    PlotConf["yLim"] = [0, 33]
+
+    PlotConf["Grid"] = 1
+
+    PlotConf["Marker"] = '.'
+    PlotConf["LineWidth"] = 1
+
+    PlotConf["ColorBar"] = "gnuplot"
+    PlotConf["ColorBarLabel"] = "STEC [m]"
+
+    PlotConf["xData"] = {}
+    PlotConf["yData"] = {}
+    PlotConf["zData"] = {}
+    Label = 0
+    PlotConf["xData"][Label] = LosData[LOS_IDX["SOD"]] / GnssConstants.S_IN_H
+    PlotConf["yData"][Label] = LosData[LOS_IDX["PRN"]]
+    PlotConf["zData"][Label] = LosData[LOS_IDX["STEC[m]"]]
+
+    PlotConf["Path"] = sys.argv[1] + '/OUT/LOS/ION/' + 'IONO_STEC_vs_PRN_TLSA_D006Y15.png'
+
+    # Call generatePlot from Plots library
+    generatePlot(PlotConf)
