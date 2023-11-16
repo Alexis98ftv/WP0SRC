@@ -140,7 +140,7 @@ if(Conf["PLOT_SATVEL"] == '1'):
     SatFunctions.plotSatVelocity(LosData)
 
    # Plot Satellite clock from NAV message of all the PRNs figures
-if(Conf["PLOT_SATCLK"] == '1'):
+if(Conf["PLOT_SATCLK_PRN"] == '1'):
     # Read the cols we need from LOS file
     LosData = read_csv(LosFile, delim_whitespace=True, skiprows=1, header=None,\
     usecols=[LOS_IDX["SOD"], 
@@ -150,5 +150,47 @@ if(Conf["PLOT_SATCLK"] == '1'):
     print( 'Plot Satellite Clocks for each PRNs ...')
 
     # Configure plot and call plot generation function
-    SatFunctions.plotClkNAV(LosData)
+    SatFunctions.plotSatCLK_PRN_NAV(LosData)
 
+   # Plot the Satellite clock corrected by the relativistic /
+   # effect and the TGD for a mono-frequency user
+if(Conf["PLOT_SATCLK"] == '1'):
+    # Read the cols we need from LOS file
+    LosData = read_csv(LosFile, delim_whitespace=True, skiprows=1, header=None,\
+    usecols=[LOS_IDX["SOD"], 
+    LOS_IDX["PRN"],
+    LOS_IDX["SV-CLK[m]"],
+    LOS_IDX["DTR[m]"],
+    LOS_IDX["TGD[m]"]])
+    
+    print( 'Plot Satellite Clocks corrected ...')
+    
+    # Configure plot and call plot generation function
+    SatFunctions.plotSatClkCorrected(LosData)
+
+# Plot the Satellite clock Total or Timing Group /
+# Delay P1P2 for all satellites
+if(Conf["PLOT_SATTGD"] == '1'):
+    # Read the cols we need from LOS file
+    LosData = read_csv(LosFile, delim_whitespace=True, skiprows=1, header=None,\
+    usecols=[LOS_IDX["SOD"], 
+    LOS_IDX["PRN"],
+    LOS_IDX["TGD[m]"]])
+    
+    print( 'Plot Satellite clock Total ...')
+    
+    # Configure plot and call plot generation function
+    SatFunctions.plotSatTGD(LosData)
+
+# Plot the Satellite clock relativistic effect (DTR)
+if(Conf["PLOT_SATDTR"] == '1'):
+    # Read the cols we need from LOS file
+    LosData = read_csv(LosFile, delim_whitespace=True, skiprows=1, header=None,\
+    usecols=[LOS_IDX["SOD"], 
+    LOS_IDX["ELEV"],
+    LOS_IDX["DTR[m]"]])
+    
+    print( 'Plot Satellite clock relativistic effect (DTR) ...')
+    
+    # Configure plot and call plot generation function
+    SatFunctions.plotSatDTR(LosData)
