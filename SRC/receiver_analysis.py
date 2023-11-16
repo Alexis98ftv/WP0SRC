@@ -124,7 +124,7 @@ if(Conf["PLOT_SATTRK"] == '1'):
     # Configure plot and call plot generation function
     SatFunctions.plotSatTracks(LosData)
 
-    # Plot Satellite Velocity figures
+# Plot Satellite Velocity figures
 if(Conf["PLOT_SATVEL"] == '1'):
     # Read the cols we need from LOS file
     LosData = read_csv(LosFile, delim_whitespace=True, skiprows=1, header=None,\
@@ -139,7 +139,7 @@ if(Conf["PLOT_SATVEL"] == '1'):
     # Configure plot and call plot generation function
     SatFunctions.plotSatVelocity(LosData)
 
-   # Plot Satellite clock from NAV message of all the PRNs figures
+# Plot Satellite clock from NAV message of all the PRNs figures
 if(Conf["PLOT_SATCLK_PRN"] == '1'):
     # Read the cols we need from LOS file
     LosData = read_csv(LosFile, delim_whitespace=True, skiprows=1, header=None,\
@@ -151,6 +151,23 @@ if(Conf["PLOT_SATCLK_PRN"] == '1'):
 
     # Configure plot and call plot generation function
     SatFunctions.plotClkNAV(LosData)
+    SatFunctions.plotSatCLK_PRN_NAV(LosData)
+
+# Plot the Satellite clock corrected by the relativistic /
+# effect and the TGD for a mono-frequency user
+if(Conf["PLOT_SATCLK"] == '1'):
+    # Read the cols we need from LOS file
+    LosData = read_csv(LosFile, delim_whitespace=True, skiprows=1, header=None,\
+    usecols=[LOS_IDX["SOD"], 
+    LOS_IDX["PRN"],
+    LOS_IDX["SV-CLK[m]"],
+    LOS_IDX["DTR[m]"],
+    LOS_IDX["TGD[m]"]])
+    
+    print( 'Plot Satellite Clocks corrected ...')
+    
+    # Configure plot and call plot generation function
+    SatFunctions.plotSatClkCorrected(LosData)
 
 # Plot the Satellite clock Total or Timing Group /
 # Delay P1P2 for all satellites
@@ -180,8 +197,8 @@ if(Conf["PLOT_SATDTR"] == '1'):
     SatFunctions.plotSatDTR(LosData)
     SatFunctions.plotSatDTR(LosData)
 
-    # Plot of slant ionospheric delays (STEC in meters) from Klobuchar
-    # model for all satellites as a function of the hour of the day
+# Plot of slant ionospheric delays (STEC in meters) from Klobuchar
+# model for all satellites as a function of the hour of the day
 if(Conf["PLOT_ION_STEC_TIME"] == '1'):
     # Read the cols we need from LOS file
     LosData = read_csv(LosFile, delim_whitespace=True, skiprows=1, header=None,\
@@ -195,9 +212,9 @@ if(Conf["PLOT_ION_STEC_TIME"] == '1'):
     SatFunctions.plotIonSTECvsTime(LosData)
 
 
-    # Plot the satellite visibility periods  using
-    # STEC value as part of the color bar in order to see the STEC
-    # dependency during the satellite visibility pass.
+# Plot the satellite visibility periods  using
+# STEC value as part of the color bar in order to see the STEC
+# dependency during the satellite visibility pass.
 if(Conf["PLOT_ION_STEC_PRN"] == '1'):
     # Read the cols we need from LOS file
     LosData = read_csv(LosFile, delim_whitespace=True, skiprows=1, header=None,\
@@ -209,3 +226,120 @@ if(Conf["PLOT_ION_STEC_PRN"] == '1'):
     
     # Configure plot and call plot generation function
     SatFunctions.plotIonSTECvsPRN(LosData)
+
+# Compute and plot VTEC in meters from STEC
+# and the Klobuchar mapping function elevation dependent
+# All satellites as a function of the hour of the day
+if(Conf["PLOT_ION_VTEC_TIME"] == '1'):
+    # Read the cols we need from LOS file
+    LosData = read_csv(LosFile, delim_whitespace=True, skiprows=1, header=None,\
+    usecols=[LOS_IDX["SOD"], 
+    LOS_IDX["ELEV"],
+    LOS_IDX["STEC[m]"],
+    LOS_IDX["VTEC[m]"]])
+    
+    print( 'Plot VTEC in meters from STEC ...')
+    
+    # Configure plot and call plot generation function
+    SatFunctions.plotIonVTECvsTime(LosData)
+
+# Plot the satellite visibility periods using
+# VTEC value as part of the color bar in order to see the effect of the
+# Sun Activity on the VTEC during the day.
+if(Conf["PLOT_ION_VTEC_PRN"] == '1'):
+    # Read the cols we need from LOS file
+    LosData = read_csv(LosFile, delim_whitespace=True, skiprows=1, header=None,\
+    usecols=[LOS_IDX["SOD"], 
+    LOS_IDX["PRN"],
+    LOS_IDX["VTEC[m]"]])
+    
+    print( 'Plot the satellite visibility periods using VTEC value ...')
+    
+    # Configure plot and call plot generation function
+    SatFunctions.plotIonVTECvsPRN(LosData)
+
+# Plot of STD (Slant Tropospheric Delay) in meters from Tropo model
+# for all satellites as a function of the hour of the day.
+if(Conf["PLOT_TROPO_STD"] == '1'):
+    # Read the cols we need from LOS file
+    LosData = read_csv(LosFile, delim_whitespace=True, skiprows=1, header=None,\
+    usecols=[LOS_IDX["SOD"], 
+    LOS_IDX["ELEV"],
+    LOS_IDX["TROPO[m]"]])
+    
+    print( 'Plot of STD (Slant Tropospheric Delay) ...')
+    
+    # Configure plot and call plot generation function
+    SatFunctions.plotTropoSTD(LosData)
+
+# Compute the Zenith Tropo Delay (ZTD) by dividing the Slant Tropo
+# Delay by the Tropo mapping function
+if(Conf["PLOT_TROPO_ZTD"] == '1'):
+    # Read the cols we need from LOS file
+    LosData = read_csv(LosFile, delim_whitespace=True, skiprows=1, header=None,\
+    usecols=[LOS_IDX["SOD"], 
+    LOS_IDX["ELEV"],
+    LOS_IDX["TROPO[m]"],
+    LOS_IDX["MPP[elev]"]])
+    
+    print( 'Compute the Zenith Tropo Delay (ZTD) ...')
+    
+    # Configure plot and call plot generation function
+    SatFunctions.plotTropoZTD(LosData)
+
+# Plot Pseudo-ranges (Code Measurements C1) for all satellites as a
+# function of the hour of the day.
+if(Conf["PLOT_MSR_COD"] == '1'):
+    # Read the cols we need from LOS file
+    LosData = read_csv(LosFile, delim_whitespace=True, skiprows=1, header=None,\
+    usecols=[LOS_IDX["SOD"], 
+    LOS_IDX["ELEV"],
+    LOS_IDX["RANGE[m]"]])
+    
+    print( 'Plot Pseudo-ranges (Code Measurements C1) for all satellites ...')
+    
+    # Configure plot and call plot generation function
+    SatFunctions.plotMsrCODES(LosData)
+
+# Plot Tau = C1C/c for all satellites 
+# as a function of the hour of the day
+if(Conf["PLOT_MSR_TAU"] == '1'):
+    # Read the cols we need from LOS file
+    LosData = read_csv(LosFile, delim_whitespace=True, skiprows=1, header=None,\
+    usecols=[LOS_IDX["SOD"], 
+    LOS_IDX["ELEV"],
+    LOS_IDX["RANGE[m]"]])
+    
+    print( 'Plot Tau ...')
+    
+    # Configure plot and call plot generation function
+    SatFunctions.plotMsrTAU(LosData)
+
+# Plot Time of Flight (ToF) for all satellites as a function 
+# of the hour of the day
+if(Conf["PLOT_MSR_TOF"] == '1'):
+    # Read the cols we need from LOS file
+    LosData = read_csv(LosFile, delim_whitespace=True, skiprows=1, header=None,\
+    usecols=[LOS_IDX["SOD"], 
+    LOS_IDX["ELEV"],
+    LOS_IDX["TOF[ms]"]])
+    
+    print( 'Plot ToF ...')
+    
+    # Configure plot and call plot generation function
+    SatFunctions.plotMsrToF(LosData)
+
+# Build and Plot the Doppler Frequency in KHz 
+if(Conf["PLOT_MSR_DOP"] == '1'):
+    # Read the cols we need from LOS file
+    LosData = read_csv(LosFile, delim_whitespace=True, skiprows=1, header=None,\
+    usecols=[LOS_IDX["SOD"], 
+    LOS_IDX["ELEV"],
+    LOS_IDX["VEL-X[m/s]"],
+    LOS_IDX["VEL-Y[m/s]"],
+    LOS_IDX["VEL-Z[m/s]"]])
+    
+    print( 'Plot the Doppler Frequency in KHz ...')
+    
+    # Configure plot and call plot generation function
+    SatFunctions.plotMsrDOP(LosData)
