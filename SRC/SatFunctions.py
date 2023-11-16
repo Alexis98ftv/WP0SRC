@@ -214,7 +214,7 @@ def plotSatVelocity(LosData):
     generatePlot(PlotConf)
 
     # Plot Satellite clock from NAV message of all the PRNs figures
-def plotClkNAV(LosData):
+def plotSatCLK_PRN_NAV(LosData):
     PlotConf = {}
     
     PlotConf["Type"] = "Lines"
@@ -249,3 +249,127 @@ def plotClkNAV(LosData):
 
         # Call generatePlot from Plots library
         generatePlot(PlotConf) 
+
+    # Plot Satellite CLK corrected Figure
+def plotSatClkCorrected(LosData):
+    PlotConf = {}
+
+    PlotConf["Type"] = "Lines"
+    PlotConf["FigSize"] = (8.4,7.6)
+    PlotConf["Title"] = "Satellite CLK + DTR - TGD from TLSA on Year 2015"\
+        " DoY 006"
+
+    PlotConf["xLabel"] = "Hour of DoY 006"
+    PlotConf["xTicks"] = range(0, 25)
+    PlotConf["xLim"] = [0, 24]
+    
+    
+    PlotConf["yLabel"] = "CLK[km]"
+
+    # Correct CLK process: Clk_co = CLK - TGD + DTR
+    CLK = np.array(LosData[LOS_IDX["SV-CLK[m]"]])
+    TGD = np.array(LosData[LOS_IDX["TGD[m]"]])
+    DTR = np.array(LosData[LOS_IDX["DTR[m]"]])
+    
+    CLK_correct = np.array(CLK-TGD+DTR)
+
+    PlotConf["Grid"] = 1
+
+    PlotConf["Marker"] = '.'
+    PlotConf["LineWidth"] = 0.5
+
+    PlotConf["ColorBar"] = "gnuplot"
+    PlotConf["ColorBarLabel"] = "GPS-PRN"
+    PlotConf["ColorBarMin"] = 0.
+    PlotConf["ColorBarMax"] = 32.
+
+    PlotConf["xData"] = {}
+    PlotConf["yData"] = {}
+    PlotConf["zData"] = {}
+    Label = 0
+    PlotConf["xData"][Label] = LosData[LOS_IDX["SOD"]] / GnssConstants.S_IN_H
+    PlotConf["yData"][Label] = CLK_correct / GnssConstants.M_IN_KM
+    PlotConf["zData"][Label] = LosData[LOS_IDX["PRN"]]
+
+    PlotConf["Path"] = sys.argv[1] + '/OUT/LOS/SAT/' + 'SAT_CLK_TLSA_D006Y15.png'
+
+    # Call generatePlot from Plots library
+    generatePlot(PlotConf)
+
+    # Plot Satellite CLK Total Figure
+def plotSatTGD(LosData):
+    PlotConf = {}
+
+    PlotConf["Type"] = "Lines"
+    PlotConf["FigSize"] = (8.4,7.6)
+    PlotConf["Title"] = "Satellite TGD (Total Group Delay) from TLSA on Year 2015"\
+        " DoY 006"
+
+    PlotConf["xLabel"] = "Hour of DoY 006"
+    PlotConf["xTicks"] = range(0, 25)
+    PlotConf["xLim"] = [0, 24]
+    
+    
+    PlotConf["yLabel"] = "TGD[m]"
+
+    PlotConf["Grid"] = 1
+
+    PlotConf["Marker"] = '.'
+    PlotConf["LineWidth"] = 0.5
+
+    PlotConf["ColorBar"] = "gnuplot"
+    PlotConf["ColorBarLabel"] = "GPS-PRN"
+    PlotConf["ColorBarMin"] = 0.
+    PlotConf["ColorBarMax"] = 32.
+
+    PlotConf["xData"] = {}
+    PlotConf["yData"] = {}
+    PlotConf["zData"] = {}
+    Label = 0
+    PlotConf["xData"][Label] = LosData[LOS_IDX["SOD"]] / GnssConstants.S_IN_H
+    PlotConf["yData"][Label] = LosData[LOS_IDX["TGD[m]"]]
+    PlotConf["zData"][Label] = LosData[LOS_IDX["PRN"]]
+
+    PlotConf["Path"] = sys.argv[1] + '/OUT/LOS/SAT/' + 'SAT_TGD_TLSA_D006Y15.png'
+
+    # Call generatePlot from Plots library
+    generatePlot(PlotConf)
+
+    # Plot Satellite CLK Total Figure
+def plotSatDTR(LosData):
+    PlotConf = {}
+
+    PlotConf["Type"] = "Lines"
+    PlotConf["FigSize"] = (8.4,7.6)
+    PlotConf["Title"] = "Satellite DTR (Clock Relativistic Effect) from TLSA on Year 2015"\
+        " DoY 006"
+
+    PlotConf["xLabel"] = "Hour of DoY 006"
+    PlotConf["xTicks"] = range(0, 25)
+    PlotConf["xLim"] = [0, 24]
+    
+    
+    PlotConf["yLabel"] = "DTR[m]"
+
+    PlotConf["Grid"] = 1
+
+    PlotConf["Marker"] = '.'
+    PlotConf["LineWidth"] = 0.5
+
+    PlotConf["ColorBar"] = "gnuplot"
+    PlotConf["ColorBarLabel"] = "Elevation [deg]"
+    PlotConf["ColorBarMin"] = 0.
+    PlotConf["ColorBarMax"] = 90.
+
+    PlotConf["xData"] = {}
+    PlotConf["yData"] = {}
+    PlotConf["zData"] = {}
+    Label = 0
+    PlotConf["xData"][Label] = LosData[LOS_IDX["SOD"]] / GnssConstants.S_IN_H
+    PlotConf["yData"][Label] = LosData[LOS_IDX["DTR[m]"]]
+    PlotConf["zData"][Label] = LosData[LOS_IDX["ELEV"]]
+
+    PlotConf["Path"] = sys.argv[1] + '/OUT/LOS/SAT/' + 'SAT_DTR_TLSA_D006Y15.png'
+
+    # Call generatePlot from Plots library
+    generatePlot(PlotConf)
