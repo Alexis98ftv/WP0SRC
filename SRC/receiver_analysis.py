@@ -20,6 +20,7 @@ sys.path.insert(0, Common)
 
 from collections import OrderedDict
 from interfaces import LOS_IDX
+from interfaces import POS_IDX
 from pandas import read_csv
 from yaml import dump
 import SatFunctions
@@ -195,6 +196,11 @@ if(Conf["PLOT_SATDTR"] == '1'):
     # Configure plot and call plot generation function
     SatFunctions.plotSatDTR(LosData)
 
+
+#-----------------------------------------------------------------------
+# PLOT IONOSPHERE ANALYSES
+#-----------------------------------------------------------------------
+
 # Plot of slant ionospheric delays (STEC in meters) from Klobuchar
 # model for all satellites as a function of the hour of the day
 if(Conf["PLOT_ION_STEC_TIME"] == '1'):
@@ -256,6 +262,10 @@ if(Conf["PLOT_ION_VTEC_PRN"] == '1'):
     # Configure plot and call plot generation function
     SatFunctions.plotIonVTECvsPRN(LosData)
 
+#-----------------------------------------------------------------------
+# PLOT TROPOSPHERE ANALYSES
+#-----------------------------------------------------------------------
+
 # Plot of STD (Slant Tropospheric Delay) in meters from Tropo model
 # for all satellites as a function of the hour of the day.
 if(Conf["PLOT_TROPO_STD"] == '1'):
@@ -285,6 +295,11 @@ if(Conf["PLOT_TROPO_ZTD"] == '1'):
     # Configure plot and call plot generation function
     SatFunctions.plotTropoZTD(LosData)
 
+
+#-----------------------------------------------------------------------
+# PLOT MEASUREMENTS ANALYSES
+#-----------------------------------------------------------------------
+
 # Plot Pseudo-ranges (Code Measurements C1) for all satellites as a
 # function of the hour of the day.
 if(Conf["PLOT_MSR_COD"] == '1'):
@@ -292,7 +307,7 @@ if(Conf["PLOT_MSR_COD"] == '1'):
     LosData = read_csv(LosFile, delim_whitespace=True, skiprows=1, header=None,\
     usecols=[LOS_IDX["SOD"], 
     LOS_IDX["ELEV"],
-    LOS_IDX["RANGE[m]"]])
+    LOS_IDX["MEAS[m]"]])
     
     print( 'Plot Pseudo-ranges (Code Measurements C1) for all satellites ...')
     
@@ -306,7 +321,7 @@ if(Conf["PLOT_MSR_TAU"] == '1'):
     LosData = read_csv(LosFile, delim_whitespace=True, skiprows=1, header=None,\
     usecols=[LOS_IDX["SOD"], 
     LOS_IDX["ELEV"],
-    LOS_IDX["RANGE[m]"]])
+    LOS_IDX["MEAS[m]"]])
     
     print( 'Plot Tau ...')
     
@@ -335,9 +350,58 @@ if(Conf["PLOT_MSR_DOP"] == '1'):
     LOS_IDX["ELEV"],
     LOS_IDX["VEL-X[m/s]"],
     LOS_IDX["VEL-Y[m/s]"],
-    LOS_IDX["VEL-Z[m/s]"]])
+    LOS_IDX["VEL-Z[m/s]"],
+    LOS_IDX["SAT-X[m]"],
+    LOS_IDX["SAT-Y[m]"],
+    LOS_IDX["SAT-Z[m]"]])
     
     print( 'Plot the Doppler Frequency in KHz ...')
     
     # Configure plot and call plot generation function
     SatFunctions.plotMsrDOP(LosData)
+
+# Build and Plot the PVT filter residuals by correcting the code
+# measurements from all the known information from Navigation
+# message and models
+if(Conf["PLOT_MSR_RESIDUAL"] == '1'):
+    # Read the cols we need from LOS file
+    LosData = read_csv(LosFile, delim_whitespace=True, skiprows=1, header=None,\
+    usecols=[LOS_IDX["SOD"], 
+    LOS_IDX["PRN"],
+    LOS_IDX["SV-CLK[m]"],
+    LOS_IDX["DTR[m]"],
+    LOS_IDX["TGD[m]"],
+    LOS_IDX["RANGE[m]"],
+    LOS_IDX["MEAS[m]"],
+    LOS_IDX["TROPO[m]"],
+    LOS_IDX["STEC[m]"]])
+
+    print( 'Build and Plot the PVT filter residuals ...')
+    
+    # Configure plot and call plot generation function
+    SatFunctions.plotMsrResiduals(LosData)
+
+
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#>>>>> POS FILE ANALYSES
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+# Get POS file full path
+PosFile = Scen + '/OUT/POS/' + Conf["POS_FILE"]
+
+#-----------------------------------------------------------------------
+# PLOT POSITION ANALYSES
+#-----------------------------------------------------------------------
+
+# Plot the instantaneous number of satellites used by TLSA receiver
+# in PVT solution along the whole day as a function of the hour of the day
+if(Conf["PLOT_POS_SATS"] == '1'):
+    # Read the cols we need from LOS file
+    PosData = read_csv(PosFile, delim_whitespace=True, skiprows=1, header=None,\
+    usecols=[POS_IDX["SOD"],
+    POS_IDX["NSATS"]])
+
+    print('Plot the instantaneous number of satellites along the whole day...')
+    
+    # Configure plot and call plot generation function
+    SatFunctions.plotPosSats(PosData)
