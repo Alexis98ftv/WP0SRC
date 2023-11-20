@@ -15,6 +15,9 @@ Earth_R_km = 6371
 # Light Speed in m/s
 LIGHT_SPEED_M_S = 299792458
 
+# Miliseconds in 1 second
+MS_IN_S = 1000
+
 # Frequency of signal L1 in MHz
 FREQ_L1_MHz = 1575.42
 
@@ -26,3 +29,6 @@ WGS84_REF_Y = 121207.93198126
 
 # Reference WGS84 ECEF coordinate Z
 WGS84_REF_Z = 4362375.76379941
+
+# KHz in MHz
+KHz_IN_MHz = 1000

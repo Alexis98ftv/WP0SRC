@@ -24,3 +24,24 @@ LOS_IDX = {
 "VTEC[m]":21,
 "MPP[elev]":22
 }
+
+POS_IDX = {
+"SOD":0,
+"DOY":1,
+"YEAR":2,
+"NSATS":3,
+"RX-LAT[DEG]":4,
+"RX-LON[DEG]":5,
+"RX-ALT[m]":6,
+"EPE[m]":7,
+"NPE[m]":8,
+"UPE[m]":9,
+"SIG-EPE":10,
+"SIG-NPE":11,
+"SIG-UPE":12,
+"GDOP":13,
+"PDOP":14,
+"TDOP":15,
+"HDOP":16,
+"VDOP":17
+}

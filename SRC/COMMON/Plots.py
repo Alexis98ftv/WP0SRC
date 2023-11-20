@@ -34,6 +34,10 @@ def saveFigure(fig, Path):
     fig.savefig(Path, dpi=150., bbox_inches='tight')
 
 def prepareAxis(PlotConf, ax):
+
+    ax.get_yaxis().get_major_formatter().set_useOffset(False)
+    ax.get_yaxis().get_major_formatter().set_scientific(False)
+
     for key in PlotConf:
         if key == "Title":
             ax.set_title(PlotConf["Title"])
@@ -83,6 +87,7 @@ def prepareColorBar(PlotConf, ax, Values):
         for v in Values.values():
             Maxs.append(max(v))
         Max = max(Maxs)
+
     normalize = mpl.cm.colors.Normalize(vmin=Min, vmax=Max)
 
     divider = make_axes_locatable(ax)
@@ -158,3 +163,5 @@ def generateLinesPlot(PlotConf):
 def generatePlot(PlotConf):
     if(PlotConf["Type"] == "Lines"):
         generateLinesPlot(PlotConf)
+
+
