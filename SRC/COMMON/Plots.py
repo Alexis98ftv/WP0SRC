@@ -42,7 +42,7 @@ def prepareAxis(PlotConf, ax):
         if key == "Title":
             ax.set_title(PlotConf["Title"])
 
-        for axis in ["x", "y"]:
+        for axis in ["x", "y", "z"]:
             if axis == "x":
                 if key == axis + "Label":
                     ax.set_xlabel(PlotConf[axis + "Label"])
@@ -68,6 +68,21 @@ def prepareAxis(PlotConf, ax):
                 
                 if key == axis + "Lim":
                     ax.set_ylim(PlotConf[axis + "Lim"])
+
+            if axis == "z":
+                if key == axis + "Label":
+                    ax.set_ylabel(PlotConf[axis + "Label"])
+
+                if key == axis + "Ticks":
+                    ax.set_yticks(PlotConf[axis + "Ticks"])
+
+                if key == axis + "TicksLabels":
+                    ax.set_yticklabels(PlotConf[axis + "TicksLabels"])
+                
+                if key == axis + "Lim":
+                    ax.set_ylim(PlotConf[axis + "Lim"])
+
+            
 
         if key == "Grid" and PlotConf[key] == True:
             ax.grid(linestyle='--', linewidth=0.5, which='both')
@@ -98,7 +113,7 @@ def prepareColorBar(PlotConf, ax, Values):
     cmap=cmap,
     norm=mpl.colors.Normalize(vmin=Min, vmax=Max),
     label=PlotConf["ColorBarLabel"])
-
+#ticks option in colorbarbase
     return normalize, cmap
 
 def drawMap(PlotConf, ax,):
@@ -133,7 +148,7 @@ def drawMap(PlotConf, ax,):
 
 def generateLinesPlot(PlotConf):
     LineWidth = 1.5
-
+    Color = "b"
     fig, ax = createFigure(PlotConf)
 
     prepareAxis(PlotConf, ax)
@@ -147,18 +162,29 @@ def generateLinesPlot(PlotConf):
             drawMap(PlotConf, ax)
 
     for Label in PlotConf["yData"].keys():
+        if "Color" in PlotConf:
+            ColorData = PlotConf["Color"][Label]
+        else:
+            ColorData = Color
         if "ColorBar" in PlotConf:
             ax.scatter(PlotConf["xData"][Label], PlotConf["yData"][Label], 
             marker = PlotConf["Marker"],
-            linewidth = LineWidth,
+            s = LineWidth,
             c = cmap(normalize(np.array(PlotConf["zData"][Label]))))
 
         else:
             ax.plot(PlotConf["xData"][Label], PlotConf["yData"][Label],
             PlotConf["Marker"],
-            linewidth = LineWidth)
+            color = ColorData,
+            label = Label,
+            markersize = LineWidth)
 
+    if "Legend" in PlotConf:
+        plt.legend()
+    
     saveFigure(fig, PlotConf["Path"])
+    plt.close('all')
+
 
 def generatePlot(PlotConf):
     if(PlotConf["Type"] == "Lines"):
