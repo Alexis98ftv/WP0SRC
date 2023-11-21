@@ -24,6 +24,9 @@ from interfaces import POS_IDX
 from pandas import read_csv
 from yaml import dump
 import SatFunctions
+import AtmFunctions
+import MsrFunctions
+import PosFunctions
 
 #######################################################
 # INTERNAL FUNCTIONS 
@@ -213,7 +216,7 @@ if(Conf["PLOT_ION_STEC_TIME"] == '1'):
     print( 'Plot of slant ionospheric delays (STEC in meters) ...')
     
     # Configure plot and call plot generation function
-    SatFunctions.plotIonSTECvsTime(LosData)
+    AtmFunctions.plotIonSTECvsTime(LosData)
 
 
 # Plot the satellite visibility periods  using
@@ -229,7 +232,7 @@ if(Conf["PLOT_ION_STEC_PRN"] == '1'):
     print( 'Plot the satellite visibility periods (STEC depency) ...')
     
     # Configure plot and call plot generation function
-    SatFunctions.plotIonSTECvsPRN(LosData)
+    AtmFunctions.plotIonSTECvsPRN(LosData)
 
 # Compute and plot VTEC in meters from STEC
 # and the Klobuchar mapping function elevation dependent
@@ -245,7 +248,7 @@ if(Conf["PLOT_ION_VTEC_TIME"] == '1'):
     print( 'Plot VTEC in meters from STEC ...')
     
     # Configure plot and call plot generation function
-    SatFunctions.plotIonVTECvsTime(LosData)
+    AtmFunctions.plotIonVTECvsTime(LosData)
 
 # Plot the satellite visibility periods using
 # VTEC value as part of the color bar in order to see the effect of the
@@ -260,7 +263,7 @@ if(Conf["PLOT_ION_VTEC_PRN"] == '1'):
     print( 'Plot the satellite visibility periods using VTEC value ...')
     
     # Configure plot and call plot generation function
-    SatFunctions.plotIonVTECvsPRN(LosData)
+    AtmFunctions.plotIonVTECvsPRN(LosData)
 
 #-----------------------------------------------------------------------
 # PLOT TROPOSPHERE ANALYSES
@@ -278,7 +281,7 @@ if(Conf["PLOT_TROPO_STD"] == '1'):
     print( 'Plot of STD (Slant Tropospheric Delay) ...')
     
     # Configure plot and call plot generation function
-    SatFunctions.plotTropoSTD(LosData)
+    AtmFunctions.plotTropoSTD(LosData)
 
 # Compute the Zenith Tropo Delay (ZTD) by dividing the Slant Tropo
 # Delay by the Tropo mapping function
@@ -293,7 +296,7 @@ if(Conf["PLOT_TROPO_ZTD"] == '1'):
     print( 'Compute the Zenith Tropo Delay (ZTD) ...')
     
     # Configure plot and call plot generation function
-    SatFunctions.plotTropoZTD(LosData)
+    AtmFunctions.plotTropoZTD(LosData)
 
 
 #-----------------------------------------------------------------------
@@ -312,7 +315,7 @@ if(Conf["PLOT_MSR_COD"] == '1'):
     print( 'Plot Pseudo-ranges (Code Measurements C1) for all satellites ...')
     
     # Configure plot and call plot generation function
-    SatFunctions.plotMsrCODES(LosData)
+    MsrFunctions.plotMsrCODES(LosData)
 
 # Plot Tau = C1C/c for all satellites 
 # as a function of the hour of the day
@@ -326,7 +329,7 @@ if(Conf["PLOT_MSR_TAU"] == '1'):
     print( 'Plot Tau ...')
     
     # Configure plot and call plot generation function
-    SatFunctions.plotMsrTAU(LosData)
+    MsrFunctions.plotMsrTAU(LosData)
 
 # Plot Time of Flight (ToF) for all satellites as a function 
 # of the hour of the day
@@ -340,7 +343,7 @@ if(Conf["PLOT_MSR_TOF"] == '1'):
     print( 'Plot ToF ...')
     
     # Configure plot and call plot generation function
-    SatFunctions.plotMsrToF(LosData)
+    MsrFunctions.plotMsrToF(LosData)
 
 # Build and Plot the Doppler Frequency in KHz 
 if(Conf["PLOT_MSR_DOP"] == '1'):
@@ -358,7 +361,7 @@ if(Conf["PLOT_MSR_DOP"] == '1'):
     print( 'Plot the Doppler Frequency in KHz ...')
     
     # Configure plot and call plot generation function
-    SatFunctions.plotMsrDOP(LosData)
+    MsrFunctions.plotMsrDOP(LosData)
 
 # Build and Plot the PVT filter residuals by correcting the code
 # measurements from all the known information from Navigation
@@ -379,7 +382,7 @@ if(Conf["PLOT_MSR_RESIDUAL"] == '1'):
     print( 'Build and Plot the PVT filter residuals ...')
     
     # Configure plot and call plot generation function
-    SatFunctions.plotMsrResiduals(LosData)
+    MsrFunctions.plotMsrResiduals(LosData)
 
 
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -404,4 +407,81 @@ if(Conf["PLOT_POS_SATS"] == '1'):
     print('Plot the instantaneous number of satellites along the whole day...')
     
     # Configure plot and call plot generation function
-    SatFunctions.plotPosSats(PosData)
+    PosFunctions.plotPosSats(PosData)
+
+# Plot the PDOP, GDOP, TDOP in order to see the dependency of
+# the satellite number used in PVT and the DOP
+if(Conf["PLOT_POS_DOP"] == '1'):
+    # Read the cols we need from LOS file
+    PosData = read_csv(PosFile, delim_whitespace=True, skiprows=1, header=None,\
+    usecols=[POS_IDX["SOD"],
+    POS_IDX["GDOP"],
+    POS_IDX["PDOP"],
+    POS_IDX["TDOP"]])
+
+    print('Plot the PDOP, GDOP, TDOP...')
+    
+    # Configure plot and call plot generation function
+    PosFunctions.plotPosDOP(PosData)
+
+# Plot the HDOP and VDOP together with the number of satellites
+# used (second axis) in order to see the dependency of the satellite
+# number and the DOP
+if(Conf["PLOT_POS_HVDOP"] == '1'):
+    # Read the cols we need from LOS file
+    PosData = read_csv(PosFile, delim_whitespace=True, skiprows=1, header=None,\
+    usecols=[POS_IDX["SOD"],
+    POS_IDX["NSATS"],
+    POS_IDX["HDOP"],
+    POS_IDX["VDOP"]])
+
+    print('Plot the HDOP and VDOP together with the number of satellites...')
+    
+    # Configure plot and call plot generation function
+    PosFunctions.plotPosHVDOP(PosData)
+
+
+# Plot  the  East/North/Up  Position  Error  (EPE,  NPE,  UPE)  as  a
+# function of the hour of the day on the same graph
+if(Conf["PLOT_POS_ENU_PE"] == '1'):
+    # Read the cols we need from LOS file
+    PosData = read_csv(PosFile, delim_whitespace=True, skiprows=1, header=None,\
+    usecols=[POS_IDX["SOD"],
+    POS_IDX["EPE[m]"],
+    POS_IDX["NPE[m]"],
+    POS_IDX["UPE[m]"]])
+
+    print('Plot  the  East/North/Up  Position  Error  (EPE,  NPE,  UPE)...')
+    
+    # Configure plot and call plot generation function
+    PosFunctions.plotPosENUPE(PosData)
+
+# Plot the Horizontal and Vertical Position Error (HPE) and VPE as a
+# function of time (hour of the day)
+if(Conf["PLOT_POS_HPE_VPE"] == '1'):
+    # Read the cols we need from LOS file
+    PosData = read_csv(PosFile, delim_whitespace=True, skiprows=1, header=None,\
+    usecols=[POS_IDX["SOD"],
+    POS_IDX["EPE[m]"],
+    POS_IDX["NPE[m]"],
+    POS_IDX["UPE[m]"]])
+
+    print('Plot the Horizontal and Vertical Position Error (HPE) and VPE...')
+    
+    # Configure plot and call plot generation function
+    PosFunctions.plotPosHVPE(PosData)
+
+# Plot Horizontal Scatter plot with NPE vs. EPE (North Position Error
+# Y-axis and East Position Error X-axis)
+if(Conf["PLOT_POS_NPE_EPE"] == '1'):
+    # Read the cols we need from LOS file
+    PosData = read_csv(PosFile, delim_whitespace=True, skiprows=1, header=None,\
+    usecols=[POS_IDX["SOD"],
+    POS_IDX["EPE[m]"],
+    POS_IDX["NPE[m]"],
+    POS_IDX["HDOP"]])
+
+    print('Plot Horizontal Scatter plot with NPE vs. EPE (North Position Error...')
+    
+    # Configure plot and call plot generation function
+    PosFunctions.plotPosNPEEPE(PosData)
