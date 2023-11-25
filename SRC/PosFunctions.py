@@ -116,10 +116,13 @@ def plotPosHVDOP(PosData):
     PlotConf["yLabel"] = "DOP"
     #PlotConf["yLim"] = [0.5, 3.0]
 
+    PlotConf["ColorBar"] = "gnuplot"
+    PlotConf["ColorBarLabel"] = "Number of Satellites"
     #PlotConf["zLabel"] = "Number of Satellites"
     #PlotConf["zTicks"] = range(0, 13)
     #PlotConf["zLim"] = [1, 12]
-
+ 
+    
     PlotConf["Grid"] = 1
 
     PlotConf["Marker"] = '-'
@@ -137,16 +140,15 @@ def plotPosHVDOP(PosData):
     colors = ["purple", "green", "orange"]
     
     for idx, label in enumerate(Label):
-        DOP = PosData[POS_IDX[label]]
-
         PlotConf["Color"][label] = colors[idx]
-
+        
         PlotConf["xData"][label] = PosData[POS_IDX["SOD"]] / GnssConstants.S_IN_H
+        DOP = PosData[POS_IDX[label]]
         PlotConf["yData"][label] = DOP
 
     PlotConf["zData"][0] = PosData[POS_IDX["NSATS"]]
     PlotConf["Path"] = sys.argv[1] + '/OUT/POS/POS/' + 'POS_HVDOP_vs_TIME_TLSA_D006Y15.png'
-
+  
     # Call generatePlot from Plots library
     generatePlot(PlotConf)
 

@@ -114,6 +114,17 @@ def plotIonVTECvsTime(LosData):
     
     PlotConf["yLabel"] = "VTEC[m]"
     # VTEC PROCESS
+    #VTEC = LosData[LOS_IDX["VTEC[m]"]]
+    #MAPP = LosData[LOS_IDX["MPP[elev]"]]
+    h = GnssConstants.Height_IONO_layer_km * GnssConstants.M_IN_KM
+    Re = GnssConstants.Earth_R_km * GnssConstants.M_IN_KM
+    
+    STEC = LosData[LOS_IDX["STEC[m]"]]
+    elev_rad = (np.array(LosData[LOS_IDX["ELEV"]]) * np.pi) / 180
+
+    mapp_calc = np.array((1 - (Re/(Re+h) * np.cos(elev_rad))**2) ** (-1/2))
+
+    VTEC_calc = STEC / mapp_calc
 
     PlotConf["Grid"] = 1
 
@@ -130,7 +141,7 @@ def plotIonVTECvsTime(LosData):
     PlotConf["zData"] = {}
     Label = 0
     PlotConf["xData"][Label] = LosData[LOS_IDX["SOD"]] / GnssConstants.S_IN_H
-    PlotConf["yData"][Label] = LosData[LOS_IDX["VTEC[m]"]]
+    PlotConf["yData"][Label] = VTEC_calc
     PlotConf["zData"][Label] = LosData[LOS_IDX["ELEV"]]
 
     PlotConf["Path"] = sys.argv[1] + '/OUT/LOS/ION/' + 'IONO_VTEC_vs_TIME_TLSA_D006Y15.png'
@@ -232,8 +243,8 @@ def plotTropoZTD(LosData):
     # ZTD calc
     STD = np.array(LosData[LOS_IDX["TROPO[m]"]])
     
-    elev = (np.array(LosData[LOS_IDX["ELEV"]]) * np.pi) / 180
-    mpp_calc = np.array(1.001/np.sqrt(0.002001 + np.sin(elev)**2))
+    elev_rad = (np.array(LosData[LOS_IDX["ELEV"]]) * np.pi) / 180
+    mpp_calc = np.array(1.001/np.sqrt(0.002001 + np.sin(elev_rad)**2))
 
     ZTD = STD/mpp_calc
     
