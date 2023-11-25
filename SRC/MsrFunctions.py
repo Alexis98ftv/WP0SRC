@@ -233,6 +233,7 @@ def plotMsrResiduals(LosData):
 
     PlotConf["ColorBar"] = "gnuplot"
     PlotConf["ColorBarLabel"] = "GPS-PRN"
+    PlotConf["ColorBarTicks"] = range(1, 33)
 
     PlotConf["xData"] = {}
     PlotConf["yData"] = {}

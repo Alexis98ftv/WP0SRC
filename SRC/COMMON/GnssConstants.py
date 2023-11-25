@@ -12,6 +12,9 @@ M_IN_KM = 1000
 # Earth Radius in km
 Earth_R_km = 6371
 
+# Height IONO LAYER in KLOBUCHAR Model 
+Height_IONO_layer_km = 350
+
 # Light Speed in m/s
 LIGHT_SPEED_M_S = 299792458
 

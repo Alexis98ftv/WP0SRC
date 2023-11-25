@@ -243,6 +243,7 @@ if(Conf["PLOT_ION_VTEC_TIME"] == '1'):
     usecols=[LOS_IDX["SOD"], 
     LOS_IDX["ELEV"],
     LOS_IDX["STEC[m]"],
+    LOS_IDX["MPP[elev]"],
     LOS_IDX["VTEC[m]"]])
     
     print( 'Plot VTEC in meters from STEC ...')

@@ -279,6 +279,7 @@ def plotSatClkCorrected(LosData):
 
     PlotConf["ColorBar"] = "gnuplot"
     PlotConf["ColorBarLabel"] = "GPS-PRN"
+    PlotConf["ColorBarTicks"] = range(1, 33)
 
 
     PlotConf["xData"] = {}
@@ -317,8 +318,7 @@ def plotSatTGD(LosData):
 
     PlotConf["ColorBar"] = "gnuplot"
     PlotConf["ColorBarLabel"] = "GPS-PRN"
-    PlotConf["ColorBarMin"] = 0.
-    PlotConf["ColorBarMax"] = 32.
+    PlotConf["ColorBarTicks"] = range(1, 33)
 
     PlotConf["xData"] = {}
     PlotConf["yData"] = {}

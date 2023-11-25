@@ -69,18 +69,18 @@ def prepareAxis(PlotConf, ax):
                 if key == axis + "Lim":
                     ax.set_ylim(PlotConf[axis + "Lim"])
 
-            if axis == "z":
+            """ if axis == "z":
                 if key == axis + "Label":
-                    ax.set_ylabel(PlotConf[axis + "Label"])
+                    ax.set_zlabel(PlotConf[axis + "Label"])
 
                 if key == axis + "Ticks":
-                    ax.set_yticks(PlotConf[axis + "Ticks"])
+                    ax.set_zticks(PlotConf[axis + "Ticks"])
 
                 if key == axis + "TicksLabels":
-                    ax.set_yticklabels(PlotConf[axis + "TicksLabels"])
+                    ax.set_zticklabels(PlotConf[axis + "TicksLabels"])
                 
                 if key == axis + "Lim":
-                    ax.set_ylim(PlotConf[axis + "Lim"])
+                    ax.set_zlim(PlotConf[axis + "Lim"]) """
 
             
 
@@ -112,8 +112,10 @@ def prepareColorBar(PlotConf, ax, Values):
     cbar = mpl.colorbar.ColorbarBase(color_ax, 
     cmap=cmap,
     norm=mpl.colors.Normalize(vmin=Min, vmax=Max),
-    label=PlotConf["ColorBarLabel"])
-#ticks option in colorbarbase
+    label=PlotConf["ColorBarLabel"],
+    #ticks option in colorbarbase
+    ticks=PlotConf["ColorBarTicks"])
+
     return normalize, cmap
 
 def drawMap(PlotConf, ax,):
