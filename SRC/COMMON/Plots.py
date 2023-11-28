@@ -42,7 +42,7 @@ def prepareAxis(PlotConf, ax):
         if key == "Title":
             ax.set_title(PlotConf["Title"])
 
-        for axis in ["x", "y", "z"]:
+        for axis in ["x", "y"]:
             if axis == "x":
                 if key == axis + "Label":
                     ax.set_xlabel(PlotConf[axis + "Label"])
@@ -67,25 +67,39 @@ def prepareAxis(PlotConf, ax):
                     ax.set_yticklabels(PlotConf[axis + "TicksLabels"])
                 
                 if key == axis + "Lim":
-                    ax.set_ylim(PlotConf[axis + "Lim"])
-
-            """ if axis == "z":
-                if key == axis + "Label":
-                    ax.set_zlabel(PlotConf[axis + "Label"])
-
-                if key == axis + "Ticks":
-                    ax.set_zticks(PlotConf[axis + "Ticks"])
-
-                if key == axis + "TicksLabels":
-                    ax.set_zticklabels(PlotConf[axis + "TicksLabels"])
-                
-                if key == axis + "Lim":
-                    ax.set_zlim(PlotConf[axis + "Lim"]) """
-
-            
+                    ax.set_ylim(PlotConf[axis + "Lim"])            
 
         if key == "Grid" and PlotConf[key] == True:
             ax.grid(linestyle='--', linewidth=0.5, which='both')
+
+def prepareDoubleAxis (PlotConf, ax2):
+    for key in PlotConf:
+        for axis in ["x2", "y2"]:
+            if axis == "x2":
+                if key == axis + "Label":
+                    ax2.set_xlabel(PlotConf[axis + "Label"])
+
+                if key == axis + "Ticks":
+                    ax2.set_xticks(PlotConf[axis + "Ticks"])
+
+                if key == axis + "TicksLabels":
+                    ax2.set_xticklabels(PlotConf[axis + "TicksLabels"])
+            
+                if key == axis + "Lim":
+                    ax2.set_xlim(PlotConf[axis + "Lim"])
+
+            if axis == "y2":
+                if key == axis + "Label":
+                    ax2.set_ylabel(PlotConf[axis + "Label"])
+
+                if key == axis + "Ticks":
+                    ax2.set_yticks(PlotConf[axis + "Ticks"])
+
+                if key == axis + "TicksLabels":
+                    ax2.set_yticklabels(PlotConf[axis + "TicksLabels"])
+            
+                if key == axis + "Lim":
+                    ax2.set_ylim(PlotConf[axis + "Lim"])
 
 def prepareColorBar(PlotConf, ax, Values):
     try:
@@ -153,6 +167,10 @@ def generateLinesPlot(PlotConf):
     Color = "b"
     fig, ax = createFigure(PlotConf)
 
+    #Store the information of the curves and labels to plot a legend
+    LegendCurve = None
+    LegendLabel = None
+    
     prepareAxis(PlotConf, ax)
 
     for key in PlotConf:
@@ -168,6 +186,7 @@ def generateLinesPlot(PlotConf):
             ColorData = PlotConf["Color"][Label]
         else:
             ColorData = Color
+
         if "ColorBar" in PlotConf:
             ax.scatter(PlotConf["xData"][Label], PlotConf["yData"][Label], 
             marker = PlotConf["Marker"],
@@ -180,9 +199,36 @@ def generateLinesPlot(PlotConf):
             color = ColorData,
             label = Label,
             markersize = LineWidth)
+            #LEGEND
+            legendcurve , legendlabel = ax.get_legend_handles_labels()
+            LegendCurve = legendcurve
+            LegendLabel = legendlabel
+            
 
+    #TwinAx
+    if "DoubleAx" in PlotConf:
+        ax2 = ax.twinx()
+        # label,ticks,lim,etc in Prepare Axes
+        prepareDoubleAxis(PlotConf, ax2)
+        for Label in PlotConf["zData"].keys():
+            if "Color" in PlotConf:
+                ColorData = PlotConf["Color"][Label]
+            else:
+                ColorData = Color
+            if PlotConf["DoubleAx"] == Label:
+                ax2.plot(PlotConf["xData"][Label], PlotConf["zData"][Label],
+                PlotConf["Marker"],
+                color = ColorData,
+                label = Label,
+                markersize = LineWidth)
+                #LEGEND
+                legendcurve , legendlabel = ax2.get_legend_handles_labels()
+                LegendCurve.extend(legendcurve)
+                LegendLabel.extend(legendlabel)
+                
+    #LEGEND             
     if "Legend" in PlotConf:
-        plt.legend()
+        plt.legend(LegendCurve, LegendLabel)
     
     saveFigure(fig, PlotConf["Path"])
     plt.close('all')
