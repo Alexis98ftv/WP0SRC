@@ -109,19 +109,18 @@ def plotPosHVDOP(PosData):
     PlotConf["FigSize"] = (8.4,7.6)
     PlotConf["Title"] = "Dilution Of Precision (DOP) with Number of Satellites from TLSA on Year 2015 DoY 006"
 
+    PlotConf["DoubleAx"] = "NSATS"
+
     PlotConf["xLabel"] = "Hour of DoY 006"
     PlotConf["xTicks"] = range(0, 25)
     PlotConf["xLim"] = [0, 24]
-    
-    PlotConf["yLabel"] = "DOP"
-    #PlotConf["yLim"] = [0.5, 3.0]
 
-    PlotConf["ColorBar"] = "gnuplot"
-    PlotConf["ColorBarLabel"] = "Number of Satellites"
-    #PlotConf["zLabel"] = "Number of Satellites"
-    #PlotConf["zTicks"] = range(0, 13)
-    #PlotConf["zLim"] = [1, 12]
- 
+    PlotConf["yLabel"] = "DOP"
+    PlotConf["yLim"] = [0.5, 3.0]
+    
+    PlotConf["y2Label"] = "Number of Satellites"
+    PlotConf["y2Lim"] = [-13, 13]
+    PlotConf["y2Ticks"] = range(0,13)
     
     PlotConf["Grid"] = 1
 
@@ -132,12 +131,12 @@ def plotPosHVDOP(PosData):
     PlotConf["xData"] = {}
     PlotConf["yData"] = {}
     PlotConf["zData"] = {}
-
+  
     PlotConf["Color"] = {}
     PlotConf["Legend"] = True
     
-    Label = ["HDOP", "VDOP", "NSATS"]
-    colors = ["purple", "green", "orange"]
+    Label = ["HDOP", "VDOP"]
+    colors = ["purple", "green"]
     
     for idx, label in enumerate(Label):
         PlotConf["Color"][label] = colors[idx]
@@ -145,8 +144,11 @@ def plotPosHVDOP(PosData):
         PlotConf["xData"][label] = PosData[POS_IDX["SOD"]] / GnssConstants.S_IN_H
         DOP = PosData[POS_IDX[label]]
         PlotConf["yData"][label] = DOP
+    
+    PlotConf["Color"]["NSATS"] = "orange"
+    PlotConf["xData"]["NSATS"] = PosData[POS_IDX["SOD"]] / GnssConstants.S_IN_H
+    PlotConf["zData"]["NSATS"] = PosData[POS_IDX["NSATS"]]
 
-    PlotConf["zData"][0] = PosData[POS_IDX["NSATS"]]
     PlotConf["Path"] = sys.argv[1] + '/OUT/POS/POS/' + 'POS_HVDOP_vs_TIME_TLSA_D006Y15.png'
   
     # Call generatePlot from Plots library
@@ -207,7 +209,7 @@ def plotPosHVPE(PosData):
     PlotConf["xLim"] = [0, 24]
     
     PlotConf["yLabel"] = "HVPE[m]"
-    #PlotConf["yLim"] = [0, 8]
+    PlotConf["yLim"] = [0, 8]
 
     PlotConf["Grid"] = 1
 
