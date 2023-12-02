@@ -165,10 +165,10 @@ def plotMsrDOP(LosData):
 
     # Calc uLOS(unitary vector) and vLOS(velocity in uLOS direction)
     uLOS = rLOS / np.linalg.norm(rLOS, axis = 0)
-
     vLOS = uLOS * vSAT
+
     vLOS = np.sum(vLOS, axis=0)
-    
+
     # CALL Doppler Function with vLOS
     fD = doppler_frequency(vLOS)
 
@@ -248,46 +248,4 @@ def plotMsrResiduals(LosData):
     # Call generatePlot from Plots library
     generatePlot(PlotConf)
 
-
-
-# Plot the instantaneous number of satellites along the whole day
-def plotPosSats(PosData):
-    PlotConf = {}
-
-    PlotConf["Type"] = "Lines"
-    PlotConf["FigSize"] = (8.4,7.6)
-    PlotConf["Title"] = "Residuals C1C vs Time for TLSA"
-
-    PlotConf["xLabel"] = "Hour of DoY 006"
-    PlotConf["xTicks"] = range(0, 25)
-    PlotConf["xLim"] = [0, 24]
-    
-    PlotConf["yLabel"] = "Number of satellites"
-    PlotConf["yLim"] = [0, 15]
-
-    PlotConf["Grid"] = 1
-
-    PlotConf["Marker"] = '-'
-    
-    PlotConf["LineWidth"] = 1.5
-
-
-    PlotConf["xData"] = {}
-    PlotConf["yData"] = {}
-
-    Label = 0
-    #Lable = "GDOP"
-    #for Label in ["",""]:
-    #plt.legend
-
-    PlotConf["Color"] = {}
-    PlotConf["Color"][Label] = "yellow"
-
-    PlotConf["xData"][Label] = PosData[POS_IDX["SOD"]] / GnssConstants.S_IN_H
-    PlotConf["yData"][Label] = PosData[POS_IDX["NSATS"]]
-
-    PlotConf["Path"] = sys.argv[1] + '/OUT/POS/POS/' + 'POS_SATS_vs_TIME_TLSA_D006Y15.png'
-
-    # Call generatePlot from Plots library
-    generatePlot(PlotConf)
 

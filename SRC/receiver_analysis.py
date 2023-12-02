@@ -154,7 +154,6 @@ if(Conf["PLOT_SATCLK_PRN"] == '1'):
     print( 'Plot Satellite Clocks for each PRNs ...')
 
     # Configure plot and call plot generation function
-    SatFunctions.plotClkNAV(LosData)
     SatFunctions.plotSatCLK_PRN_NAV(LosData)
 
 # Plot the Satellite clock corrected by the relativistic /
