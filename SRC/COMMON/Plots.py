@@ -18,8 +18,13 @@ warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 #import PlotsConstants as Const
 
 def createFigure(PlotConf):
+    if "Polar" in PlotConf: 
+        projection = {'projection': 'polar'}
+    else:
+        projection = None
+
     try:
-        fig, ax = plt.subplots(1, 1, figsize = PlotConf["FigSize"])
+        fig, ax = plt.subplots(1, 1, figsize = PlotConf["FigSize"], subplot_kw = projection)
     
     except:
         fig, ax = plt.subplots(1, 1)
@@ -72,6 +77,26 @@ def prepareAxis(PlotConf, ax):
         if key == "Grid" and PlotConf[key] == True:
             ax.grid(linestyle='--', linewidth=0.5, which='both')
 
+        if key == "Polar":
+            #------------------------
+            # Center N and decide the direction
+            ax.set_theta_offset(np.radians(90))
+            ax.set_theta_direction(1)
+            #-------------------
+            # Central origin without radius
+            ax.set_rorigin(-0)
+            #-------------------
+            # Visible limits
+            ax.set_rlim(0,90) 
+            #-------------------
+            # thetagrid ticks, "N", "E", "S", "W"
+            ax.set_thetagrids([0, 90, 180, 270], labels = ['N', 'W', 'S', 'E'])
+            #-------------------
+            # rgrid ticks, angle, labels
+            ax.set_rgrids(range(0, 91, 10), angle=345,\
+                           labels = ['90°','80°','70°','60°','50°','40°','30°','20°','10°','0°'])
+            #------------------- set_x/yticks & set_x/yticklabels
+            
 def prepareDoubleAxis (PlotConf, ax2):
     for key in PlotConf:
         for axis in ["x2", "y2"]:
@@ -117,24 +142,37 @@ def prepareColorBar(PlotConf, ax, Values):
             Maxs.append(max(v))
         Max = max(Maxs)
 
-    normalize = mpl.cm.colors.Normalize(vmin=Min, vmax=Max)
-
-    divider = make_axes_locatable(ax)
-
     #ticks option in colorbarbase
     if "ColorBarTicks" in PlotConf:
         colorbarticks=PlotConf["ColorBarTicks"]
     else:
         colorbarticks=None
+    
+    normalize = mpl.cm.colors.Normalize(vmin=Min, vmax=Max)
 
-    # size size% of the plot and gap of pad% from the plot
-    color_ax = divider.append_axes("right", size="3%", pad="2%")
-    cmap = mpl.cm.get_cmap(PlotConf["ColorBar"])
-    cbar = mpl.colorbar.ColorbarBase(color_ax, 
-    cmap=cmap,
-    norm=mpl.colors.Normalize(vmin=Min, vmax=Max),
-    label=PlotConf["ColorBarLabel"],
-    ticks=colorbarticks)
+    if "Polar" in PlotConf:
+        # Adjust the size and position of the color bar within the polar plot
+        cax = plt.axes([ax.get_position().x1 + 0.05, ax.get_position().y0, 0.04, ax.get_position().height])
+
+        cmap = mpl.cm.get_cmap(PlotConf["ColorBar"])
+        
+        cbar = mpl.colorbar.ColorbarBase(cax,
+            cmap=cmap,
+            norm=normalize,
+            label=PlotConf["ColorBarLabel"],
+            ticks=colorbarticks)
+            
+    else:
+        divider = make_axes_locatable(ax)
+        # size size% of the plot and gap of pad% from the plot
+        color_ax = divider.append_axes("right", size="3%", pad="2%")
+        cmap = mpl.cm.get_cmap(PlotConf["ColorBar"])
+        cbar = mpl.colorbar.ColorbarBase(color_ax, 
+            cmap=cmap,
+            norm=mpl.colors.Normalize(vmin=Min, vmax=Max),
+            label=PlotConf["ColorBarLabel"],
+            ticks=colorbarticks
+        )
 
     return normalize, cmap
 
@@ -194,7 +232,7 @@ def generateLinesPlot(PlotConf):
             ColorData = Color
 
         if "ColorBar" in PlotConf:
-            ax.scatter(PlotConf["xData"][Label], PlotConf["yData"][Label], 
+            ax.scatter(PlotConf["xData"][Label], PlotConf["yData"][Label],
             marker = PlotConf["Marker"],
             s = LineWidth,
             c = cmap(normalize(np.array(PlotConf["zData"][Label]))))
@@ -210,7 +248,6 @@ def generateLinesPlot(PlotConf):
             LegendCurve = legendcurve
             LegendLabel = legendlabel
             
-
     #TwinAx
     if "DoubleAx" in PlotConf:
         ax2 = ax.twinx()
@@ -244,4 +281,4 @@ def generatePlot(PlotConf):
     if(PlotConf["Type"] == "Lines"):
         generateLinesPlot(PlotConf)
 
-
+#
