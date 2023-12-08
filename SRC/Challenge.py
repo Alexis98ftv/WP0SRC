@@ -36,7 +36,7 @@ def plotSatPolarView(LosData):
 #-----------------------------------------------------------------------
 # CODE START
 #-----------------------------------------------------------------------
-    PlotConf["FigSize"] = (8.4,7.6) # (8.4,7.6) * 15 = (126,114)
+    PlotConf["FigSize"] = (8.4,7.6) 
 
     azim = LosData[LOS_IDX["AZIM"]]
     elev = LosData[LOS_IDX["ELEV"]]
@@ -55,10 +55,14 @@ def plotSatPolarView(LosData):
 #-----------------------------------------------------------------------
 # CODE FINISH
 #-----------------------------------------------------------------------
-    ColorBarTicks = [1,2,3,4,5,6,7,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,27,28,29,30,31,32]
+    Ticks1range = list(range(1,8))
+    Ticks2range = list(range(9,26))
+    Ticks3range = list(range(27,33))
+    ColorBarTicks = Ticks1range + Ticks2range + Ticks3range
+
     PlotConf["ColorBar"] = "gnuplot"
     PlotConf["ColorBarLabel"] = "GPS-PRN"
-    PlotConf["ColorBarTicks"] =  ColorBarTicks
+    PlotConf["ColorBarTicks"] = ColorBarTicks
     
     PlotConf["xData"] = {}
     PlotConf["yData"] = {}
