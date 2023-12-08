@@ -27,6 +27,7 @@ import SatFunctions
 import AtmFunctions
 import MsrFunctions
 import PosFunctions
+import Challenge
 
 #######################################################
 # INTERNAL FUNCTIONS 
@@ -487,3 +488,21 @@ if(Conf["PLOT_POS_NPE_EPE"] == '1'):
     
     # Configure plot and call plot generation function
     PosFunctions.plotPosNPEEPE(PosData)
+
+
+#-----------------------------------------------------------------------
+# WP0 CHALLENGE
+#-----------------------------------------------------------------------
+
+# Plot Satellite Polar VIEW
+if(Conf["PLOT_CHALLENGE"] == '1'):
+    # Read the cols we need from LOS file
+    LosData = read_csv(LosFile, delim_whitespace=True, skiprows=1, header=None,\
+    usecols=[LOS_IDX["PRN"],
+    LOS_IDX["ELEV"],
+    LOS_IDX["AZIM"]])
+
+    print('Plot Satellite Polar VIEW...')
+    
+    # Configure plot and call plot generation function
+    Challenge.plotSatPolarView(LosData)
